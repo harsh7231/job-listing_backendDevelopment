@@ -26,13 +26,6 @@ app.use((req, res, next) => {
     error.status = 404;
     next(error);
 });
-  
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res
-      .status(500)
-      .json({ error: "Something went wrong! Please try again later." });
-});
 
 app.listen(process.env.PORT, () => {
     mongoose

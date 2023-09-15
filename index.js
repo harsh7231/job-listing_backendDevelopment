@@ -4,6 +4,9 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+const authRouter = require("./routes/authRoute");
+const jobRouter = require("./routes/jobRoute");
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -21,11 +24,24 @@ app.get("/health", (req, res) => {
       database: dbStatus,
     });
 });
+
+app.use("/", authRouter);
+app.use("/", jobRouter);
+
 app.use((req, res, next) => {
     const error = new Error("Not found");
     error.status = 404;
     next(error);
 });
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res
+      .status(500)
+      .json({ error: "Something went wrong! Please try again later." });
+  });
+  
+  module.exports = app;
 
 app.listen(process.env.PORT, () => {
     mongoose

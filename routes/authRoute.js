@@ -37,7 +37,7 @@ const register = async (req, res) => {
       // Generate and return the JWT token after sign up
       const user = await User.findOne({ email });
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-        expiresIn: 1000,
+        expiresIn: 10000,
       });
       res.status(201).json({
         message: "User registered successfully",

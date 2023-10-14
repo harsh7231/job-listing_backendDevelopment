@@ -15,45 +15,32 @@ app.use(cors());
 
 dotenv.config();
 
+// Health check endpoint
 app.get("/health", (req, res) => {
-    const dbStatus =
-      mongoose.connection.readyState === 1 ? "Connected" : "Disconnected";
-  
-    res.status(200).json({
-      server: "Running",
-      database: dbStatus,
-    });
+  const dbStatus =
+    mongoose.connection.readyState === 1 ? "Connected" : "Disconnected";
+
+  res.status(200).json({
+    server: "Running",
+    database: dbStatus,
+  });
 });
 
 app.use("/", authRouter);
 app.use("/", jobRouter);
 
 app.use((req, res, next) => {
-    const error = new Error("Not found");
-    error.status = 404;
-    next(error);
+  const error = new Error("Not found");
+  error.status = 404;
+  next(error);
 });
 
+// Error handler middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res
-      .status(500)
-      .json({ error: "Something went wrong! Please try again later." });
-  });
-  
-  module.exports = app;
+  console.error(err.stack);
+  res
+    .status(500)
+    .json({ error: "Something went wrong! Please try again later." });
+});
 
-app.listen(process.env.PORT, () => {
-    mongoose
-      .connect(process.env.MONGODB_URL, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      })
-      .then(() => {
-        console.log("MongoDB Connected");
-        console.log(`App listening at http://localhost:${process.env.PORT}`);
-      })
-      .catch((err) => console.log(err));
-  });
-  
 module.exports = app;

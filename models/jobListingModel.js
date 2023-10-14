@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
-const jobDescriptionSchema = new Schema({
+const jobListingSchema = new Schema({
   companyName: {
     type: String,
     required: [true, "Company name is required"],
@@ -28,6 +28,7 @@ const jobDescriptionSchema = new Schema({
   },
   jobLocation: {
     type: String,
+    // required: [true, "Job location is required"],
   },
   jobDescription: {
     type: String,
@@ -41,12 +42,9 @@ const jobDescriptionSchema = new Schema({
     type: [String],
     required: [true, "Skills required is required"],
   },
-  information: {
-    type: String,
-  },
   createdAt: { type: Date, default: Date.now },
 });
 
-const jobDescription = mongoose.model("JobListing", jobDescriptionSchema);
+const jobListingModel = mongoose.model("JobListing", jobListingSchema);
 
-module.exports = jobDescription;
+module.exports = jobListingModel;

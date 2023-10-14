@@ -19,7 +19,8 @@ exports.register = async (req, res) => {
       return res.status(409).json({ error: "User already exists" });
     }
 
-    // Hash the password using bcrypt
+    else{
+      // Hash the password using bcrypt
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -43,6 +44,7 @@ exports.register = async (req, res) => {
       name: user.name,
       token,
     });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -71,7 +73,8 @@ exports.login = async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
-
+else{
+  
     // Generate and return the JWT token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: 3000,
@@ -79,6 +82,7 @@ exports.login = async (req, res) => {
     res
       .status(200)
       .json({ message: "Login successful", name: user.name, token });
+}
   } catch (error) {
     res.status(500).json({ error: "Failed to login" });
   }
